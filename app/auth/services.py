@@ -2,23 +2,23 @@
 from app.auth.models import UserModel
 
 
-class AuthServices:
+# class AuthServices:
 
-    @staticmethod
-    def login(username: str, password: str) -> bool:
-        '''
-        Login the user
-        '''
-        #TODO: implement this method
-        raise NotImplementedError()
+#     @staticmethod
+#     def login(username: str, password: str) -> bool:
+#         '''
+#         Login the user
+#         '''
+#         #TODO: implement this method
+#         raise NotImplementedError()
 
-    @staticmethod
-    def register(username: str, password: str) -> bool:
-        '''
-        Register the user
-        '''
-        #TODO: implement this method
-        raise NotImplementedError()
+#     @staticmethod
+#     def register(username: str, password: str) -> bool:
+#         '''
+#         Register the user
+#         '''
+#         #TODO: implement this method
+#         raise NotImplementedError()
 
 class UserServices:
 
@@ -41,7 +41,7 @@ class UserServices:
     @staticmethod
     def add_user_to_db(user: UserModel) -> bool:
         '''
-        Add the user to the database
+        Add the user to the database 
         '''
         #TODO: implement this method
         raise NotImplementedError()

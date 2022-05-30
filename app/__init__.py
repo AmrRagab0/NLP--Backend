@@ -1,6 +1,7 @@
 from flask import Flask, jsonify
 from flask_cors import CORS
 from flask_jwt_extended import JWTManager
+from app.auth.services import UserServices
 from app.shared.db_man  import db
 from app.shared.jwt.models import TokenBlocklistModel
 
@@ -19,17 +20,14 @@ def create_app():
         """
         This method is used to attach the information of the user to the JWT access token.
         """
-        # user = UserServices.retrieve_by_user_id(identity, app)
-        # if user:
-        #     return {
-        #         "user_id": user.user_id,
-        #         "username": user.username,
-        #         "email": user.email,
-        #     }
-        # return {"description": "User is not logged in", "error": "not_logged_in"}, 401
-        #TODO: add user info to JWT
-        
-        raise NotImplementedError()
+        user = UserServices.get_user_by_id(identity, app)
+        if user:
+            return {
+                "user_id": user.user_id,
+                "username": user.username,
+                "user_type": user.user_type,
+            }
+        return {"description": "User is not logged in", "error": "not_logged_in"}, 401
 
     
     @jwt.token_in_blocklist_loader  # callback to chick if the jwt exists in the jwt blocklist database
