@@ -2,11 +2,13 @@ class Product:
     product_name: str
     product_id: int
     total_rating: float
+    agents_ids: list[str]
 
-    def __init__(self, product_name: str, product_id: int, total_rating: float):
+    def __init__(self, product_name: str, product_id: int, total_rating: float, agents_ids: list[str]):
         self.product_name = product_name
         self.product_id = product_id
         self.total_rating = total_rating
+        self.agents_ids = agents_ids
 
     @staticmethod
     def from_json(json: dict):

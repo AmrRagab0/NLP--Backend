@@ -7,7 +7,7 @@ from flask_jwt_extended import (
     get_jwt,
 )
 from uuid import uuid4
-from app.auth.models import UserModel
+from app.auth.models import UserModel, UserType
 from app.auth.services import UserServices
 
 _auth_parser = reqparse.RequestParser()
@@ -64,50 +64,55 @@ class LoginResource(Resource):
             }, 500
 
 
-# class RegisterResource(Resource):
-#     @jwt_required()
-#     def post(self):
-#         #TOOD: check if the type of the user
-#         data = _auth_parser.parse_args()
-#         try:
-#             if not data.get("username"):
-#                 return {
-#                     "description": "username is required",
-#                     "error ": "not_found",
-#                 }, 404
-#             if not data.get("password"):
-#                 return {"description": "email is required", "error ": "not_found"}, 404
+class RegisterResource(Resource):
+    @jwt_required()
+    def post(self):
+        claims = get_jwt()
+        if claims["user_type"] != UserType.STAKEHOLDER:
+            return {
+                "description": "Only Stakeholders can register a new user",
+                "error": "unauthorized",
+            }, 401
+        data = _auth_parser.parse_args()
+        try:
+            if not data.get("username"):
+                return {
+                    "description": "username is required",
+                    "error ": "not_found",
+                }, 404
+            if not data.get("password"):
+                return {"description": "email is required", "error ": "not_found"}, 404
 
-#             if not data.get("user_type"):
-#                 return {
-#                     "description": "user type is required",
-#                     "error ": "not_found",
-#                 }, 404
-#             if UserServices.get_user_by_username(data.get("username")):
-#                 return {
-#                     "description": "A user with this username already exists.",
-#                     "error": "username_exists",
-#                 }, 400
-#             data["user_id"] = str(uuid4())
+            if not data.get("user_type"):
+                return {
+                    "description": "user type is required",
+                    "error ": "not_found",
+                }, 404
+            if UserServices.get_user_by_username(data.get("username")):
+                return {
+                    "description": "A user with this username already exists.",
+                    "error": "username_exists",
+                }, 400
+            data["user_id"] = str(uuid4())
 
-#             user = UserModel.from_json(data)
-#             is_created = UserServices.add_user_to_db(user)
+            user = UserModel.from_json(data)
+            is_created = UserServices.add_user_to_db(user)
 
-#             if not is_created:
-#                 return {
-#                     "description": "username already exists",
-#                     "error": "username_exists",
-#                 }, 400
-#             access_token = create_access_token(user.user_id, fresh=True)
-#             refresh_token = create_refresh_token(user.user_id)
-#             return {
-#                 "message": "User created successfully.",
-#                 "user": UserModel.to_json(user),
-#                 "accessToken": access_token,
-#                 "refreshToken": refresh_token,
-#             }, 201
-#         except:
-#             return {
-#                 "description": "Internal server error",
-#                 "error": "internal_server_error",
-#             }, 500
+            if not is_created:
+                return {
+                    "description": "username already exists",
+                    "error": "username_exists",
+                }, 400
+            access_token = create_access_token(user.user_id, fresh=True)
+            refresh_token = create_refresh_token(user.user_id)
+            return {
+                "message": "User created successfully.",
+                "user": UserModel.to_json(user),
+                "accessToken": access_token,
+                "refreshToken": refresh_token,
+            }, 201
+        except:
+            return {
+                "description": "Internal server error",
+                "error": "internal_server_error",
+            }, 500
