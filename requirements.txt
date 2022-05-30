@@ -1,0 +1,5 @@
+Flask
+Flask-RESTful
+Flask-JWT-Extended
+mypy_extensions
+flask_cors
