@@ -6,6 +6,8 @@ from app.shared.db_man  import db
 from app.shared.jwt.models import TokenBlocklistModel
 
 def create_app():
+    from app.auth import add_resources as add_auth_resources
+    from app.reviews import  add_resources as add_reviews_resources
     app = Flask(__name__)
     CORS(app)
 
