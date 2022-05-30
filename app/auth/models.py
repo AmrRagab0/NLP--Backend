@@ -1,5 +1,4 @@
 from enum import Enum
-from typing import Dict
 
 class UserType(Enum):
     USER = "fd3f8baa-3ceb-4325-b6d3-72f78b4911fc"
@@ -20,7 +19,7 @@ class UserModel:
         self.password= password
 
     @staticmethod
-    def from_json(json:Dict) :
+    def from_json(json:dict) :
         '''
         Create a UserModel from a json
         '''
@@ -28,7 +27,7 @@ class UserModel:
         raise NotImplementedError()
         
 
-    def to_json(self) -> Dict:
+    def to_json(self) -> dict:
         '''
         Create a json from a UserModel
         '''
